@@ -18,29 +18,132 @@ const PNG_FILE_EXTENSION = ".png";
  */
 const TEST_STRING = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 
-class StringRenderTool {
+function optionsChangeWindow (options) {
+    return options.fontSize  ||  options.height  ||  options.width;
+}
 
-    renderSync (options = {}) {
+class StringRenderTool {
+    #fontSize;
+    #height;
+    #_string;
+    #width;
+
+    get height () {
+        return this.#height ?? DEFAULT_STRING_RENDER_HEIGHT;
+    }
+
+    set height (value) {
+        this.#setHeight(value);
+        this.#reloadWindow();
+    }
+
+    #setHeight (value) {
+        value ??= this.fontSize;
+
+        if (typeof value !== "number"  ||  !Number.isInteger(value)  ||  value < 1) {
+            value = this.fontSize;
+        }
+
+        this.#height = value;
+    }
+
+    get fontSize () {
+        return this.#fontSize ?? MINIMUM_FONT_SIZE;
+    }
+
+    set fontSize (value) {
+        this.#setFontSize(value);
+        this.#reloadWindow();
+    }
+
+    #setFontSize (value) {
+        value ??= MINIMUM_FONT_SIZE;
+
+        if (value < MINIMUM_FONT_SIZE) {
+            value = MINIMUM_FONT_SIZE;
+        }
+    }
+
+    get #string () {
+        return this.#_string ?? " ";
+    }
+
+    set #string (value) {
+        this.#setString(value);
+        this.#reloadWindow();
+    }
+
+    #setString (value) {
+        if (typeof value !== "string") {
+            if (value) {
+                value = value.toString();
+            }
+            else {
+                value = "";
+            }
+        }
+
+        this.#_string = value;
+    }
+
+    get width () {
+        return this.#width ?? this.#getDefaultWidth();
+    }
+
+    set width (value) {
+        this.#setWidth(value);
+        this.#reloadWindow();
+    }
+
+    #setWidth (value) {
+        this.#width = this.#getDefaultWidth(value);
+    }
+
+    #getDefaultWidth (value) {
+        value ??= NaN;
+
+        if (!Number.isInteger(value)  ||  value < 1) {
+            value = Math.round(this.#string.length * 0.75 * this.height);
+        }
+
+        return value;
+    }
+
+    constructor (options = {}) {
+        if (options.fontSize) {
+            this.#setFontSize(options.fontSize);
+        }
+
+        if (options.height) {
+            this.#setHeight(options.height);
+        }
+
+        if (options.width) {
+            this.#setWidth(options.width ?? null);
+        }
+
+        this.#openWindow();
+    }
+
+    render (options = {}) {
         options ??= {};
 
-        const string = options.string ?? "";
+        this.#setString(options.string);
 
-        let fontSize = options.fontSize ?? MINIMUM_FONT_SIZE;
-
-        if (fontSize < MINIMUM_FONT_SIZE) {
-            fontSize = MINIMUM_FONT_SIZE;
+        if (options.fontSize) {
+            this.#setFontSize(options.fontSize);
         }
 
-        let height = options.height ?? fontSize;
-
-        if (!Number.isInteger(height)  ||  height < 1) {
-            height = fontSize;
+        if (options.height) {
+            this.#setHeight(options.height);
         }
 
-        let width = options.width ?? NaN;
+        if (options.width) {
+            this.#setWidth(options.width);
+        }
 
-        if (!Number.isInteger(width)  ||  width < 1) {
-            width = Math.round(string.length * 0.75 * height);
+        if (optionsChangeWindow(options)) {
+            this.#reloadWindow();
         }
 
         let output = options.output ?? null;
@@ -62,15 +165,17 @@ class StringRenderTool {
             }
         }
 
-        // Create the window.
-        rl.InitWindow(width, height, "String Render Tool");
+        const draw = () => {
+            console.debug(this.#string.length);
+            console.debug(this.fontSize);
+            console.debug(this.width, this.height);
+            console.debug();
 
-        function draw () {
             rl.BeginDrawing();
             rl.ClearBackground(rl.BLACK);
-            rl.DrawText(string, 0, 0, fontSize, rl.WHITE);
+            rl.DrawText(this.#string, 0, 0, this.fontSize, rl.WHITE);
             rl.EndDrawing();
-        }
+        };
 
         if (typeof output === "string") {
             draw();
@@ -81,9 +186,25 @@ class StringRenderTool {
                 draw();
             }
         }
+    }
 
+    close () {
+        this.#closeWindow();
+    }
+
+    #closeWindow () {
         // Close the window.
         rl.CloseWindow();
+    }
+
+    #openWindow () {
+        // Create the window.
+        rl.InitWindow(this.width, this.height, "String Render Tool");
+    }
+
+    #reloadWindow () {
+        this.#closeWindow();
+        this.#openWindow();
     }
 }
 

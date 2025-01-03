@@ -1,7 +1,7 @@
 
 const { parseArgs } = require("node:util");
 
-const { DEFAULT_STRING_RENDER_HEIGHT, DEFAULT_STRING_RENDER_WIDTH, StringRenderTool } = require("../src");
+const { StringRenderTool } = require("../src");
 
 async function main (args) {
     const strings = args.positionals;
@@ -12,32 +12,44 @@ async function main (args) {
         width
     } = args.values;
 
-    const stringRenderer = new StringRenderTool();
+    const stringRenderer = new StringRenderTool({
+        fontSize,
+        height,
+        width
+    });
 
     for (let i = 0; i < strings.length; i++) {
         const output = outputs[i];
         const string = strings[i];
 
-        stringRenderer.renderSync({
-            fontSize,
-            height,
+        stringRenderer.render({
             output,
-            string,
-            width
+            string
         });
     }
+
+    stringRenderer.close();
 }
 
 async function start (args) {
     try {
         await main(args);
     } catch (error) {
+        if (args.values.debug) {
+            throw error;
+        }
+
         console.error(error.message);
         process.exit(1);
     }
 }
 
 const options = {
+    debug: {
+        type: "boolean",
+        default: false,
+        multiple: false
+    },
     "font-size": {
         type: "string",
         default: "NaN",
