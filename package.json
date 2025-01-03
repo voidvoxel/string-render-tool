@@ -1,0 +1,27 @@
+{
+  "name": "string-render-tool",
+  "version": "0.0.0",
+  "description": "A tool used to render strings of text into bitmaps",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voidvoxel/string-render-tool.git"
+  },
+  "keywords": [
+    "string",
+    "renderer",
+    "tool"
+  ],
+  "author": "Ashlynn Juniper",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/voidvoxel/string-render-tool/issues"
+  },
+  "homepage": "https://github.com/voidvoxel/string-render-tool#readme",
+  "dependencies": {
+    "raylib": "^0.14.0"
+  }
+}
