@@ -27,7 +27,7 @@ npm i -D string-render-tool
 ### CLI tool
 
 ```sh
-const
+string-render-tool --font-size 12 "Hello, world!" -o hello_world.png
 ```
 
 ### Library
@@ -44,6 +44,13 @@ stringRenderer.render({ output: "hello_world.png", string: "Hello, world!" });
 
 ```json
 {
-
+    "name": "example",
+    "version": "0.0.0",
+    "scripts": {
+        "start": "string-render-tool \"Hello, world!\""
+    },
+    "devDependencies": {
+        "string-render-tool": "0.0.0"
+    }
 }
 ```
