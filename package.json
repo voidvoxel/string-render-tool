@@ -1,6 +1,6 @@
 {
   "name": "string-render-tool",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A tool used to render strings of text into bitmaps",
   "main": "src/index.js",
   "scripts": {
