@@ -160,13 +160,6 @@ class StringRenderTool {
             this.#setWidth(options.width);
         }
 
-        console.debug({
-            width: this.width,
-            height: this.height,
-            fontSize: this.fontSize,
-            fits: this.#canStringFit(options.string)
-        });
-
         if (optionsChangeWindow(options)  ||  !this.#canStringFit(options.string)) {
             this.#reloadWindow();
         }
