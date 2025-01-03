@@ -46,7 +46,7 @@ const options = {
     },
     height: {
         type: "string",
-        default: DEFAULT_STRING_RENDER_HEIGHT.toString(),
+        default: "NaN",
         short: "h",
         multiple: false
     },
@@ -58,7 +58,7 @@ const options = {
     },
     width: {
         type: "string",
-        default: DEFAULT_STRING_RENDER_WIDTH.toString(),
+        default: "NaN",
         short: "w",
         multiple: false
     }

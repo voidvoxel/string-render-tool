@@ -23,15 +23,24 @@ class StringRenderTool {
     renderSync (options = {}) {
         options ??= {};
 
-        const height = options.height ?? DEFAULT_STRING_RENDER_HEIGHT;
         const string = options.string ?? "";
-        // const width = options.width ?? DEFAULT_STRING_RENDER_WIDTH;
-        const width = Math.round(options.width ?? 0.75 * height);
 
-        let fontSize = options.fontSize ?? height;
+        let fontSize = options.fontSize ?? MINIMUM_FONT_SIZE;
 
         if (fontSize < MINIMUM_FONT_SIZE) {
             fontSize = MINIMUM_FONT_SIZE;
+        }
+
+        let height = options.height ?? fontSize;
+
+        if (!Number.isInteger(height)  ||  height < 1) {
+            height = fontSize;
+        }
+
+        let width = options.width ?? NaN;
+
+        if (!Number.isInteger(width)  ||  width < 1) {
+            width = Math.round(string.length * 0.75 * height);
         }
 
         let output = options.output ?? null;
