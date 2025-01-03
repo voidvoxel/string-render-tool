@@ -1,7 +1,7 @@
 
 const { parseArgs } = require("node:util");
 
-const { DEFAULT_HEIGHT, DEFAULT_WIDTH, StringRenderTool } = require("../src");
+const { DEFAULT_STRING_RENDER_HEIGHT, DEFAULT_STRING_RENDER_WIDTH, StringRenderTool } = require("../src");
 
 async function main (args) {
     const strings = args.positionals;
@@ -38,7 +38,7 @@ async function start (args) {
 const options = {
     height: {
         type: "string",
-        default: DEFAULT_HEIGHT.toString(),
+        default: DEFAULT_STRING_RENDER_HEIGHT.toString(),
         short: "h",
         multiple: false
     },
@@ -50,7 +50,7 @@ const options = {
     },
     width: {
         type: "string",
-        default: DEFAULT_WIDTH.toString(),
+        default: DEFAULT_STRING_RENDER_WIDTH.toString(),
         short: "w",
         multiple: false
     }

@@ -3,8 +3,8 @@ const path = require("node:path");
 
 const rl = require("raylib");
 
-const DEFAULT_WIDTH = 256 + 128 + 64;
-const DEFAULT_HEIGHT = 12;
+const DEFAULT_STRING_RENDER_WIDTH = 256 + 128 + 64;
+const DEFAULT_STRING_RENDER_HEIGHT = 12;
 
 const PNG_FILE_EXTENSION = ".png";
 
@@ -19,9 +19,9 @@ class StringRenderTool {
 
     renderSync (options = {}) {
         options ??= {};
-        const height = options.height ?? DEFAULT_HEIGHT;
+        const height = options.height ?? DEFAULT_STRING_RENDER_HEIGHT;
         const string = options.string ?? "";
-        const width = options.width ?? DEFAULT_WIDTH;
+        const width = options.width ?? DEFAULT_STRING_RENDER_WIDTH;
 
         let output = options.output ?? path.resolve(
             path.join(__dirname, "..", "images", string + PNG_FILE_EXTENSION)
@@ -56,7 +56,7 @@ class StringRenderTool {
 }
 
 module.exports = {
-    DEFAULT_HEIGHT,
-    DEFAULT_WIDTH,
+    DEFAULT_STRING_RENDER_HEIGHT,
+    DEFAULT_STRING_RENDER_WIDTH,
     StringRenderTool
 };
