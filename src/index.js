@@ -87,7 +87,13 @@ class StringRenderTool {
     }
 
     get width () {
-        return this.#width ?? this.#getDefaultWidth();
+        let width = this.#width;
+
+        if (typeof width !== "number" || width) {
+            this.#width = this.#getDefaultWidth();
+        }
+
+        return this.#width;
     }
 
     set width (value) {
@@ -103,13 +109,17 @@ class StringRenderTool {
         value ??= NaN;
 
         if (!Number.isInteger(value)  ||  value < 1) {
-            value = Math.round(this.#string.length * 0.75 * this.height);
+            value = Math.round(
+                this.#getStringPixelWidth(this.#string)
+            );
         }
 
         return value;
     }
 
     constructor (options = {}) {
+        rl.SetTraceLogLevel(rl.LOG_ERROR);
+
         if (options.fontSize) {
             this.#setFontSize(options.fontSize);
         }
@@ -123,6 +133,14 @@ class StringRenderTool {
         }
 
         this.#openWindow();
+    }
+
+    #canStringFit (string) {
+        return this.#getStringPixelWidth(string) > this.width;
+    }
+
+    #getStringPixelWidth (string) {
+        return string.length * 0.75 * this.fontSize;
     }
 
     render (options = {}) {
@@ -142,7 +160,13 @@ class StringRenderTool {
             this.#setWidth(options.width);
         }
 
-        if (optionsChangeWindow(options)) {
+        console.debug({
+            width: this.width,
+            height: this.height,
+            fontSize: this.fontSize
+        });
+
+        if (optionsChangeWindow(options)  ||  !this.#canStringFit(options.string)) {
             this.#reloadWindow();
         }
 
