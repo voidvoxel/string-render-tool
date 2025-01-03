@@ -6,6 +6,7 @@ const { DEFAULT_STRING_RENDER_HEIGHT, DEFAULT_STRING_RENDER_WIDTH, StringRenderT
 async function main (args) {
     const strings = args.positionals;
     const {
+        fontSize,
         height,
         output: outputs,
         width
@@ -18,6 +19,7 @@ async function main (args) {
         const string = strings[i];
 
         stringRenderer.renderSync({
+            fontSize,
             height,
             output,
             string,
@@ -36,6 +38,12 @@ async function start (args) {
 }
 
 const options = {
+    "font-size": {
+        type: "string",
+        default: "NaN",
+        short: "s",
+        multiple: false
+    },
     height: {
         type: "string",
         default: DEFAULT_STRING_RENDER_HEIGHT.toString(),
@@ -64,5 +72,12 @@ const args = parseArgs({
 
 args.values.height = Math.round(Number.parseFloat(args.values.height));
 args.values.width = Math.round(Number.parseFloat(args.values.width));
+
+args.values.fontSize = args.values["font-size"]
+args.values.fontSize = Math.round(Number.parseFloat(args.values.fontSize));
+
+if (!Number.isInteger(args.values.fontSize)  ||  args.values.fontSize < 1) {
+    args.values.fontSize = args.values.height;
+}
 
 start(args);

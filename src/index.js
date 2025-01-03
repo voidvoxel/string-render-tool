@@ -3,8 +3,11 @@ const path = require("node:path");
 
 const rl = require("raylib");
 
-const DEFAULT_STRING_RENDER_WIDTH = 256 + 128 + 64;
+const MINIMUM_FONT_SIZE = 12;
+
+const DEFAULT_STRING_RENDER_FONT_SIZE = MINIMUM_FONT_SIZE;
 const DEFAULT_STRING_RENDER_HEIGHT = 12;
+const DEFAULT_STRING_RENDER_WIDTH = 256 + 128 + 64;
 
 const PNG_FILE_EXTENSION = ".png";
 
@@ -22,7 +25,14 @@ class StringRenderTool {
 
         const height = options.height ?? DEFAULT_STRING_RENDER_HEIGHT;
         const string = options.string ?? "";
-        const width = options.width ?? DEFAULT_STRING_RENDER_WIDTH;
+        // const width = options.width ?? DEFAULT_STRING_RENDER_WIDTH;
+        const width = Math.round(options.width ?? 0.75 * height);
+
+        let fontSize = options.fontSize ?? height;
+
+        if (fontSize < MINIMUM_FONT_SIZE) {
+            fontSize = MINIMUM_FONT_SIZE;
+        }
 
         let output = options.output ?? null;
 
@@ -49,7 +59,7 @@ class StringRenderTool {
         function draw () {
             rl.BeginDrawing();
             rl.ClearBackground(rl.BLACK);
-            rl.DrawText(string, 0, 0, height, rl.WHITE);
+            rl.DrawText(string, 0, 0, fontSize, rl.WHITE);
             rl.EndDrawing();
         }
 
