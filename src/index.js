@@ -166,11 +166,6 @@ class StringRenderTool {
         }
 
         const draw = () => {
-            console.debug(this.#string.length);
-            console.debug(this.fontSize);
-            console.debug(this.width, this.height);
-            console.debug();
-
             rl.BeginDrawing();
             rl.ClearBackground(rl.BLACK);
             rl.DrawText(this.#string, 0, 0, this.fontSize, rl.WHITE);
