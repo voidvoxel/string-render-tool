@@ -19,36 +19,49 @@ class StringRenderTool {
 
     renderSync (options = {}) {
         options ??= {};
+
         const height = options.height ?? DEFAULT_STRING_RENDER_HEIGHT;
         const string = options.string ?? "";
         const width = options.width ?? DEFAULT_STRING_RENDER_WIDTH;
 
-        let output = options.output ?? path.resolve(
-            path.join(__dirname, "..", "images", string + PNG_FILE_EXTENSION)
-        );
+        let output = options.output ?? null;
 
-        if (!output.endsWith(PNG_FILE_EXTENSION)) {
+        if (output === "") {
+            output = null;
+        }
+
+        if (typeof output === "string" && !output.endsWith(PNG_FILE_EXTENSION)) {
             output += PNG_FILE_EXTENSION;
         }
 
-        const outputDirectory = path.dirname(output);
-
         // If the directory of the output file does not exist:
-        if (!existsSync(outputDirectory)) {
-            throw new Error(`Directory not found: "${outputDirectory}"`);
+        if (output) {
+            const outputDirectory = path.dirname(output);
+
+            if (!existsSync(outputDirectory)) {
+                throw new Error(`Directory not found: "${outputDirectory}"`);
+            }
         }
 
         // Create the window.
         rl.InitWindow(width, height, "String Render Tool");
 
-        // Draw the text.
-        rl.BeginDrawing();
-        rl.ClearBackground(rl.BLACK);
-        rl.DrawText(string, 0, 0, height, rl.WHITE);
-        rl.EndDrawing();
+        function draw () {
+            rl.BeginDrawing();
+            rl.ClearBackground(rl.BLACK);
+            rl.DrawText(string, 0, 0, height, rl.WHITE);
+            rl.EndDrawing();
+        }
 
-        // Take a screenshot of the text.
-        rl.TakeScreenshot(output);
+        if (typeof output === "string") {
+            draw();
+            rl.TakeScreenshot(output);
+        }
+        else {
+            while (!rl.WindowShouldClose()) {
+                draw();
+            }
+        }
 
         // Close the window.
         rl.CloseWindow();
