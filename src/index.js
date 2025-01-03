@@ -58,5 +58,6 @@ class StringRenderTool {
 module.exports = {
     DEFAULT_STRING_RENDER_HEIGHT,
     DEFAULT_STRING_RENDER_WIDTH,
+    TEST_STRING,
     StringRenderTool
 };
