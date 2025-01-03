@@ -62,6 +62,8 @@ class StringRenderTool {
         if (value < MINIMUM_FONT_SIZE) {
             value = MINIMUM_FONT_SIZE;
         }
+
+        this.#fontSize = value;
     }
 
     get #string () {
@@ -124,9 +126,7 @@ class StringRenderTool {
             this.#setFontSize(options.fontSize);
         }
 
-        if (options.height) {
-            this.#setHeight(options.height);
-        }
+        this.#setHeight(options.height);
 
         if (options.width) {
             this.#setWidth(options.width ?? null);
@@ -140,7 +140,7 @@ class StringRenderTool {
     }
 
     #getStringPixelWidth (string) {
-        return string.length * 0.75 * this.fontSize;
+        return Math.round(string.length * (0.8 + 0.0005 * this.fontSize) * this.fontSize);
     }
 
     render (options = {}) {
@@ -159,6 +159,13 @@ class StringRenderTool {
         if (options.width) {
             this.#setWidth(options.width);
         }
+
+        console.debug({
+            width: this.width,
+            height: this.height,
+            fontSize: this.fontSize,
+            fits: this.#canStringFit(options.string)
+        });
 
         if (optionsChangeWindow(options)  ||  !this.#canStringFit(options.string)) {
             this.#reloadWindow();
@@ -185,7 +192,7 @@ class StringRenderTool {
 
         const draw = () => {
             rl.BeginDrawing();
-            rl.ClearBackground(rl.BLACK);
+            rl.ClearBackground({r: 0, g: 0, b: 0, a: 0});
             rl.DrawText(this.#string, 0, 0, this.fontSize, rl.WHITE);
             rl.EndDrawing();
         };
