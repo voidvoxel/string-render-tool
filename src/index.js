@@ -91,7 +91,7 @@ class StringRenderTool {
     get width () {
         let width = this.#width;
 
-        if (typeof width !== "number" || width) {
+        if (typeof width !== "number" || width < 1) {
             this.#width = this.#getDefaultWidth();
         }
 
@@ -160,7 +160,11 @@ class StringRenderTool {
             this.#setWidth(options.width);
         }
 
-        if (optionsChangeWindow(options)  ||  !this.#canStringFit(options.string)) {
+        if (
+            optionsChangeWindow(options)  ||  (
+                !this.#width  &&  !this.#canStringFit(options.string)
+            )
+        ) {
             this.#reloadWindow();
         }
 
